@@ -25,8 +25,8 @@ def writeIntoFile(file, content):
         with open(file, "w") as f:
             f.write(content)
         return "Wrote content into file successfully."
-    except Exception:
-        return "Error occured."
+    except Exception as e:
+        return "Error occured: " + str(e)
     
 def readFile(file):
     try:

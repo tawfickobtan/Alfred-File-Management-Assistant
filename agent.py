@@ -54,13 +54,22 @@ while True:
                 id = tool_call.id
                 name = tool_call.function.name
                 args = json.loads(tool_call.function.arguments)
-                print(name, (str(args) if len(str(args)) < 100 else "args too long"))
+                print("Executing:")
+                print(name)
+                for arg in args:
+                    print(arg, args[arg])
+                print()
                 result = functionRegistry[name](**args)
+                print("result:")
+                print(result)
                 messages.append({
                     "role": "tool",
                     "tool_call_id": id,
                     "content": str(result)
                 })
         else:
+            print("James:")
             print(response.content)
+            print("_________________")
+            print() 
             break
