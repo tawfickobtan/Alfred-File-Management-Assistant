@@ -68,12 +68,12 @@ messages = [
 agentPanel = Panel("🤖 James:",
                      border_style="green",
                      expand=False,
-                     style="bold cyan")
+                     style="bold blue")
 
 UserPanel = Panel("💭 User:",
                      border_style="green",
                      expand=False,
-                     style="bold magenta")
+                     style="bold blue")
 
 toolPanel = Text("🛠️ Executing: ",
                      style="bold red")
