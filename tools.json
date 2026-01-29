@@ -179,7 +179,7 @@
     "type":"function",
     "function":{
       "name": "runCommand",
-      "description": "Runs a shell command and returns its output. Do not resort to this function unless absolutely necessary.",
+      "description": "Runs a shell command and returns its output. Do not resort to this function unless absolutely necessary. You must get user confirmation before running any command.",
       "parameters": {
         "type": "object",
         "properties": {

@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from rich.markdown import Markdown
+from rich.theme import Theme
 import tools
 import json
 
@@ -16,7 +17,13 @@ systemPrompt = ""
 with open("system_prompt.txt", "r") as f:
     systemPrompt = f.read()
 
-console = Console()
+custom_theme = Theme({
+    "markdown.h1": "bold white",
+    "markdown.h2": "bold green",
+    "markdown.h3": "bold yellow",
+})
+
+console = Console(theme=custom_theme)
 
 
 # Define function registry
