@@ -13,14 +13,14 @@ forbidden = [
     "system_prompt.txt"
 ]
 
-def getItemsInPath(path):
+def getItemsInPath(path: str) -> str:
     try:
         items = os.listdir(path)
         return "\n".join(items)
     except Exception as e:
         return "Error occured. " + str(e)
 
-def createFile(file):
+def createFile(file: str) -> str:
     if file in forbidden:
         return "You are not allowed to create these files."
     try:
@@ -30,7 +30,7 @@ def createFile(file):
     except Exception as e:
         return "Error occured: " + str(e)
 
-def writeIntoFile(file, content):
+def writeIntoFile(file: str, content: str) -> str:
     if file in forbidden:
         return "You are not allowed to modify these files."
     try:
@@ -40,7 +40,7 @@ def writeIntoFile(file, content):
     except Exception as e:
         return "Error occured: " + str(e)
     
-def readFile(file):
+def readFile(file: str) -> str:
     try:
         with open(file, "r", encoding="utf-8") as f:
             output = f.read()
@@ -48,7 +48,7 @@ def readFile(file):
     except Exception as e:
         return "Error occured. " + str(e)
 
-def delete(file):  
+def delete(file: str) -> str:  
     if file in forbidden:
         return "You are not allowed to delete these files."
     try:
@@ -57,14 +57,14 @@ def delete(file):
     except Exception as e:
         return "Error occured: " + str(e)
 
-def createDirectory(directory):
+def createDirectory(directory: str) -> str:
     try:
         os.makedirs(directory, exist_ok=True)
         return "Directory created successfully."
     except Exception as e:
         return "Error occured: " + str(e)
 
-def deleteDirectory(directory):
+def deleteDirectory(directory: str) -> str:
     if directory in forbidden:
         return "You are not allowed to delete these directories."
     try:
@@ -73,7 +73,7 @@ def deleteDirectory(directory):
     except Exception as e:
         return "Error occured: " + str(e)
 
-def moveFile(source, destination):
+def moveFile(source: str, destination: str) -> str:
     if source in forbidden or destination in forbidden:
         return "You are not allowed to move these files."
     try:
@@ -82,7 +82,7 @@ def moveFile(source, destination):
     except Exception as e:
         return "Error occured: " + str(e)
 
-def copyFile(source, destination):
+def copyFile(source: str, destination: str) -> str:
     if source in forbidden or destination in forbidden:
         return "You are not allowed to copy these files."
     try:
@@ -92,14 +92,14 @@ def copyFile(source, destination):
     except Exception as e:
         return "Error occured: " + str(e)
     
-def getCurrentDirectory():
+def getCurrentDirectory() -> str:
     try:
         cwd = os.getcwd()
         return cwd
     except Exception as e:
         return "Error occured. " + str(e)
 
-def runCommand(command):
+def runCommand(command: str) -> str:
     userInput = input("Are you sure you want to run this command? (y/n): ")
     if userInput.lower().strip() != "y":
         return "Command execution cancelled by user."
@@ -116,13 +116,13 @@ def runCommand(command):
     except Exception as e:
         return "Error occured. " + str(e)
 
-def fileExists(file):
+def fileExists(file: str) -> str:
     try:
         return ("Yes, " + file + " exists.") if os.path.exists(file) else ("No, " + file + " does not exist.")
     except Exception as e:
         return "Error occured: " + str(e)
 
-def getFileSize(file):
+def getFileSize(file: str) -> str:
     try:
         size = os.path.getsize(file)
         return f"Size of {file} is {size} bytes."

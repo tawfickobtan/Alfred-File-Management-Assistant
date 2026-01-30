@@ -2,6 +2,7 @@ from openai import OpenAI
 import os
 import json
 from pathlib import Path
+from typing import Any
 baseDir = Path(__file__).resolve().parent
 
 # Get configuration file
@@ -19,7 +20,7 @@ client = OpenAI(
     base_url=config["base_url"]
 )
 
-def complete(messages):
+def complete(messages: list) -> Any:
     return client.chat.completions.create(
         messages=messages,
         model=config["model"],
