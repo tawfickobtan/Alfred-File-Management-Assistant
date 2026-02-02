@@ -141,3 +141,12 @@ def readPDF(path: str) -> str:
     except Exception as e:
         return "Error occured: " + str(e)
     
+def renameFile(source: str, new_name: str) -> str:
+    if source in forbidden or new_name in forbidden:
+        return "You are not allowed to rename these files."
+    try:
+        os.rename(source, new_name)
+        return "File renamed successfully."
+    except Exception as e:
+        return "Error occured: " + str(e)
+    

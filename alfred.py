@@ -50,7 +50,8 @@ functionRegistry = {
     "runCommand": tools.runCommand,
     "fileExists": tools.fileExists,
     "getFileSize": tools.getFileSize,
-    "readPDF": tools.readPDF
+    "readPDF": tools.readPDF,
+    "renameFile": tools.renameFile
 }
 
 # Create welcome message

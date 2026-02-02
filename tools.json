@@ -240,5 +240,25 @@
     }
   }
 }
-    }
+    },
+    {
+    "type": "function",
+    "function": {
+      "name": "renameFile",
+      "description": "Renames a file from old name to new name. Must include full path in both file and new name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "The full path of the source file."
+          },
+          "new_name": {
+            "type": "string",
+            "description": "The new full path of the file."
+          }
+        },
+        "required": ["source", "new_name"]
+      }
+    }}
 ]
