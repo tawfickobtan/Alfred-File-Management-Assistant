@@ -1,5 +1,5 @@
 {
   "base_url": "https://api.groq.com/openai/v1",
-  "model": "openai/gpt-oss-120b",
+  "model": "llama-3.3-70b-versatile",
   "version": "1.0.1"
 }

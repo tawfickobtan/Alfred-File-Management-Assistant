@@ -58,7 +58,8 @@ functionRegistry = {
     "recallFact": tools.recallFact,
     "forgetFact": tools.forgetFact,
     "listMemories": tools.listMemories,
-
+    "searchWeb": tools.searchWeb,
+    "extractTextFromUrl": tools.extractTextFromUrl,
 }
 
 # Create welcome message
@@ -79,30 +80,31 @@ welcome_panel = Panel(
     padding=(0, 10)
 )
 
-console.print(welcome_panel)
-console.print(Text("Model: ", style="bold yellow") + Text(config.get("model", "openai/gpt-oss-120b"), style="white"))
-console.print(Text("Current Directory: ", style="bold yellow") + Text(tools.getCurrentDirectory(), style="white"))
-
-console.print()  # Blank line for spacing
-
 
 # Initialise Agent
 agent = Agent(
     base_url=config.get("base_url", "https://api.groq.com/openai/v1"),
     api_key=api_key,
-    model=config.get("model", "openai/gpt-oss-120b"),
+    model=config.get("model", "moonshotai/Kimi-K2-Instruct-0905"),
     toolsDesc=tooling,
     function_registry=functionRegistry,
     system_prompt=systemPrompt +"\n\n" + "Current Directory: " + tools.getCurrentDirectory() +
                 "\n\n" + "Current Items in Directory:\n" + tools.getItemsInPath(tools.getCurrentDirectory()) +
                 "\n\n" + "Your memory storage contains the following facts:\n" + tools.listMemories() +
-                "\n" + "use the rememberFact, recallFact, forgetFact, and listMemories tools to manage your memory. Whenever a fact is worth remembering for future interactions, use the rememberFact tool to store it. Try to utilise your memory as much as possible to make interactions more personalised and effective. Try to make conversations as personal as possible based on your remembered facts."
+                "\n" + "use the rememberFact, recallFact, forgetFact, and listMemories tools to manage your memory. Whenever a fact is worth remembering for future interactions, use the rememberFact tool to store it. Try to utilise your memory as much as possible to make interactions more personalised and effective. Try to make conversations as personal as possible based on your remembered facts." +
+                "\n\n" + "You are powered by the large language model: " + config.get("model", "moonshotai/Kimi-K2-Instruct-0905")
                 )
+
+console.print(welcome_panel)
+console.print(Text("Model: ", style="bold yellow") + Text(agent.model, style="white"))
+console.print(Text("Current Directory: ", style="bold yellow") + Text(tools.getCurrentDirectory(), style="white"))
+
+console.print()  # Blank line for spacing
 
 
 with console.status("Loading...", spinner="dots"):
     try:
-        response = agent.complete()
+        response = agent.step()
     except Exception as e:
         raise e
 textResponse = response[0].content
@@ -117,7 +119,8 @@ while True:
     while True:
         with console.status("Thinking...", spinner="dots"):
             try:
-                response = agent.complete()
+                response = agent.step()
+                print(response)
             except Exception as e:
                 raise e
         if len(response) > 1:
@@ -131,7 +134,8 @@ while True:
             panelText = Text("Tool: ", style="bold blue") + Text(name, style="bold white") + "\n"
             if args:
                 for arg in args:
-                    panelText += Text(arg + "⤵️\n", style="bold yellow") + Text(args[arg] if len(args[arg]) < 50 else args[arg][:50] + "...", style="white") + "\n"
+                    if not isinstance(args[arg], str):  panelText += Text(arg + "⤵️\n", style="bold yellow") + Text(str(args[arg]), style="white") + "\n"
+                    else:   panelText += Text(arg + "⤵️\n", style="bold yellow") + Text(args[arg] if len(args[arg]) < 50 else args[arg][:50] + "...", style="white") + "\n"
             panelText += "\n"
             result = response[1]["content"]
             panelText += Text("Result⤵️\n", style="bold blue") + Text(result, style="white")

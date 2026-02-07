@@ -322,5 +322,44 @@
         "properties": {}
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "searchWeb",
+      "description": "Searches the web using DuckDuckGo and returns the top k results with titles and links. Use this to find information online.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query to look up on the web."
+          },
+          "k": {
+            "type": "integer",
+            "description": "Number of results to return (default is 3).",
+            "default": 3
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "extractTextFromUrl",
+      "description": "Extracts the main text content from a webpage URL using a headless browser. Use this after searchWeb to read the actual content of a page.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL of the webpage to extract text from."
+          }
+        },
+        "required": ["url"]
+      }
+    }
   }
 ]

@@ -16,7 +16,7 @@ class Agent:
     def add_message(self, role: str, content: str):
         self.messages.append({"role": role, "content": content})
 
-    def complete(self) -> str: 
+    def step(self) -> str: 
         response = self.client.chat.completions.create(
             model=self.model,
             messages=self.messages,
