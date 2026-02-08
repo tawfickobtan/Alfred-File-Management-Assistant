@@ -1,4 +1,3 @@
-import time
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
@@ -19,7 +18,7 @@ with open(baseDir / "config.json", "r") as f:
     config = json.load(f)
 
 systemPrompt = ""
-with open(baseDir / "system_prompt.txt", "r") as f:
+with open(baseDir / "AGENT.md", "r") as f:
     systemPrompt = f.read()
 
 tooling = []
@@ -90,11 +89,11 @@ agent = Agent(
     model=config.get("model", "moonshotai/Kimi-K2-Instruct-0905"),
     toolsDesc=tooling,
     function_registry=functionRegistry,
-    system_prompt=systemPrompt +"\n\n" + "Current Directory: " + tools.getCurrentDirectory() +
-                "\n\n" + "Current Items in Directory:\n" + tools.getItemsInPath(tools.getCurrentDirectory()) +
-                "\n\n" + "Your memory storage contains the following facts:\n" + tools.listMemories() +
-                "\n" + "use the rememberFact, recallFact, forgetFact, and listMemories tools to manage your memory. Whenever a fact is worth remembering for future interactions, use the rememberFact tool to store it. Try to utilise your memory as much as possible to make interactions more personalised and effective. Try to make conversations as personal as possible based on your remembered facts." +
-                "\n\n" + "You are powered by the large language model: " + config.get("model", "moonshotai/Kimi-K2-Instruct-0905")
+    system_prompt=systemPrompt + "\n" +
+    f"Current Directory: {tools.getCurrentDirectory()}\n" +
+    f"Items in Current Directory: {tools.getItemsInPath(tools.getCurrentDirectory())}\n" +
+    f"Stored Memories: {tools.listMemories()}\n" +
+    f"Model Powering you: {config.get('model', 'llama-3.3-70b-versatile')}"
                 )
 
 console.print(welcome_panel)
