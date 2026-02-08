@@ -48,7 +48,7 @@ class Agent:
     
     def prompt(self, user_input: str) -> list:
         self.add_message("user", user_input)    
-        return self.complete()
+        return self.step()
     
     def reset_messages(self):
         self.messages = [{"role": "system", "content": self.system_prompt}]

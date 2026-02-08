@@ -361,5 +361,45 @@
         "required": ["url"]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "addVectorMemory",
+      "description": "Adds a piece of information to vector memory for later retrieval based on similarity.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The piece of information to be added to vector memory."
+          }
+        },
+        "required": ["text"]
+      }
   }
+},
+  {
+    "type": "function",
+    "function": {
+      "name": "queryVectorMemory",
+      "description": "Queries vector memory for information similar to the given query text and returns the most relevant pieces of information.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The query text to search for in vector memory."
+          },
+          "k": {
+            "type": "integer",
+            "description": "Number of relevant pieces of information to return (default is 3).",
+            "default": 3
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  }
+  
 ]

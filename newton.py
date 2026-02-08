@@ -60,6 +60,8 @@ functionRegistry = {
     "listMemories": tools.listMemories,
     "searchWeb": tools.searchWeb,
     "extractTextFromUrl": tools.extractTextFromUrl,
+    "addVectorMemory": tools.addVectorMemory,
+    "queryVectorMemory": tools.queryVectorMemory,
 }
 
 # Create welcome message
