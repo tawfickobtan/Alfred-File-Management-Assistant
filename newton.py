@@ -121,7 +121,6 @@ while True:
         with console.status("Thinking...", spinner="dots"):
             try:
                 response = agent.step()
-                print(response)
             except Exception as e:
                 raise e
         if len(response) > 1:
