@@ -3,8 +3,8 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.markdown import Markdown
 from rich.theme import Theme
-from agent import Agent
-import tools
+from agent.agent import Agent
+import agent.tools as tools
 import json
 import os
 from pathlib import Path
@@ -14,15 +14,15 @@ baseDir = Path(__file__).resolve().parent
 
 # Load config file
 config = {}
-with open(baseDir / "config.json", "r") as f:
+with open(baseDir / "configuration/config.json", "r") as f:
     config = json.load(f)
 
 systemPrompt = ""
-with open(baseDir / "AGENT.md", "r") as f:
+with open(baseDir / "configuration/AGENT.md", "r") as f:
     systemPrompt = f.read()
 
 tooling = []
-with open(baseDir / "tools.json") as f:
+with open(baseDir / "agent/tools.json") as f:
     tooling = json.load(f)
 
 api_key = os.environ.get("GROQ_API_KEY","")
@@ -34,13 +34,13 @@ custom_theme = Theme({
 })
 
 console = Console(theme=custom_theme)
-saveMessages = open(baseDir / "messages.txt", "w",encoding="utf-8")
 
 # Define function registry
 functionRegistry = {
     "getItemsInPath": tools.getItemsInPath,
     "writeIntoFile": tools.writeIntoFile,
     "readFile": tools.readFile,
+    "readFileLines": tools.readFileLines,
     "createFile": tools.createFile,
     "delete": tools.delete,
     "createDirectory": tools.createDirectory,
@@ -51,14 +51,11 @@ functionRegistry = {
     "runCommand": tools.runCommand,
     "fileExists": tools.fileExists,
     "getFileSize": tools.getFileSize,
-    "readPDF": tools.readPDF,
     "renameFile": tools.renameFile,
     "rememberFact": tools.rememberFact,
     "recallFact": tools.recallFact,
     "forgetFact": tools.forgetFact,
     "listMemories": tools.listMemories,
-    "searchWeb": tools.searchWeb,
-    "extractTextFromUrl": tools.extractTextFromUrl,
     "addVectorMemory": tools.addVectorMemory,
     "queryVectorMemory": tools.queryVectorMemory,
 }

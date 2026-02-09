@@ -2,8 +2,6 @@ import json
 import os
 import subprocess
 import time
-from bs4 import BeautifulSoup
-from urllib.parse import quote_plus
 from sentence_transformers import SentenceTransformer
 
 
@@ -78,6 +76,29 @@ def readFile(file: str) -> str:
         return "content:\n" + output    
     except Exception as e:
         return "Error occured. " + str(e)
+
+def readFileLines(file: str, start_line: int, end_line: int) -> str:
+    """Reads specific lines from a file. Line numbers are 1-indexed."""
+    try:
+        with open(file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        
+        # Validate line numbers
+        if start_line < 1 or end_line < 1:
+            return "Error: Line numbers must be 1 or greater."
+        if start_line > len(lines):
+            return f"Error: File only has {len(lines)} lines, but you asked for line {start_line}."
+        
+        # Adjust to 0-indexed and clamp end_line
+        start_idx = start_line - 1
+        end_idx = min(end_line, len(lines))
+        
+        selected_lines = lines[start_idx:end_idx]
+        content = "".join(selected_lines)
+        
+        return f"Lines {start_line}-{end_idx} of {file}:\n{content}"
+    except Exception as e:
+        return "Error occured: " + str(e)
 
 def delete(file: str) -> str:  
     if file in forbidden:
@@ -160,17 +181,6 @@ def getFileSize(file: str) -> str:
     except Exception as e:
         return "Error occured: " + str(e)
 
-def readPDF(path: str) -> str:
-    try:
-        from PyPDF2 import PdfReader
-        reader = PdfReader(path)
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text() + "\n"
-        return "content:\n" + text
-    except Exception as e:
-        return "Error occured: " + str(e)
-    
 def renameFile(source: str, new_name: str) -> str:
     if source in forbidden or new_name in forbidden:
         return "You are not allowed to rename these files."
@@ -219,99 +229,6 @@ def listMemories() -> str:
             return "No memories stored."
     except Exception as e:
         return "Error occured: " + str(e)
-    
-# Tool functions for web interaction
-    
-def searchWeb(query: str, k: int = 3) -> str:
-    try:
-        from urllib.parse import quote_plus
-        import requests
-        
-        encoded = quote_plus(query)
-        url = f"https://html.duckduckgo.com/html/?q={encoded}"
-        
-        headers = {"User-Agent": "Mozilla/5.0"}
-        response = requests.get(url, headers=headers)
-        with open("temp.txt", "w", encoding="utf-8") as f:
-            f.write(response.text)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        results = []
-        for result in soup.find_all('div', class_='result'):
-            title = result.find('a', class_='result__a')
-            if title:
-                results.append(title.get_text() + "\n(Link: " + title.get("href", "None") + ")")
-            if len(results) >= k:
-                break
-        return "\n".join(results) if results else "No results found."
-    except Exception as e:
-        return "Error occured: " + str(e)
-    
-def extractTextFromUrl(url: str) -> str:
-    try:
-        from selenium import webdriver
-        from selenium.webdriver.chrome.options import Options
-        from bs4 import BeautifulSoup
-        import re
-        
-        # Setup headless Chrome
-        options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        
-        driver = webdriver.Chrome(options=options)
-        driver.get(url)
-        
-        # Wait a bit for JS to load
-        import time
-        time.sleep(3)
-        
-        html = driver.page_source
-        driver.quit()
-        
-        # Parse with BeautifulSoup
-        soup = BeautifulSoup(html, 'html.parser')
-
-        # Try to find main content using common patterns (in order of preference)
-        content = (
-            soup.find('article') or           # Most modern sites use <article>
-            soup.find('main') or              # HTML5 semantic tag
-            soup.find('div', id='content') or # Common pattern
-            soup.find('div', class_='content') or
-            soup.find('div', id='main') or
-            soup.find('div', class_='main') or
-            soup.body                         # Last resort: entire body
-        )
-        
-        if not content:
-            return "Could not find main content area."
-        
-        # Remove unwanted elements (noise)
-        unwanted_tags = ['script', 'style', 'nav', 'header', 'footer', 'aside', 'iframe', 'noscript']
-        for tag in unwanted_tags:
-            for element in content.find_all(tag):
-                element.decompose()
-        
-        # Get all paragraph text (usually the main content)
-        paragraphs = content.find_all('p')
-        text = '\n\n'.join([p.get_text(' ', strip=True) for p in paragraphs if p.get_text(strip=True)])
-        
-        # If no paragraphs found, get all text
-        if not text:
-            text = content.get_text(' ', strip=True)
-        
-        # Clean up excessive whitespace/newlines
-        text = re.sub(r'\n{3,}', '\n\n', text)
-        text = re.sub(r' {2,}', ' ', text)
-        
-        # Limit length to prevent overwhelming the LLM
-        if len(text) > 8000:
-            text = text[:8000] + "\n\n[Content truncated...]"
-        
-        return text if text else "No readable content found."
-        
-    except Exception as e:
-        return f"Error extracting webpage: {str(e)}"
 
 # Tool functions for embedding memory management
 def _get_embedding_model():

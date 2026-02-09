@@ -1,8 +1,5 @@
 openai>=1.0.0
 rich>=13.0.0
-beautifulsoup4>=4.12.2
 requests>=2.31.0
-selenium>=4.15.0
-PyPDF2>=3.0.0
 sentence-transformers
 numpy

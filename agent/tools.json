@@ -74,6 +74,31 @@
   {
     "type": "function",
     "function": {
+      "name": "readFileLines",
+      "description": "Reads specific lines from a file. Use this instead of readFile for large files or when you only need a specific section. Line numbers are 1-indexed (line 1 is the first line).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "File path to read."
+          },
+          "start_line": {
+            "type": "integer",
+            "description": "The line number to start reading from (1-indexed, inclusive)."
+          },
+          "end_line": {
+            "type": "integer",
+            "description": "The line number to stop reading at (1-indexed, inclusive)."
+          }
+        },
+        "required": ["file", "start_line", "end_line"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
       "name": "delete",
       "description": "Deletes a file at the specified path.",
       "parameters": {
@@ -223,24 +248,7 @@
         },
         "required": ["file"]
       }
-    }}
-    ,
-    {
-    "type": "function",
-    "function": {
-      "name": "readPDF",
-      "description": "Reads and returns the text content of a PDF file.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "path": {
-            "type": "string",
-            "description": "Path to the PDF file."
-          }
-    }
-  }
-}
-    },
+    }},
     {
     "type": "function",
     "function": {
@@ -320,45 +328,6 @@
       "parameters": {
         "type": "object",
         "properties": {}
-      }
-    }
-  },
-  {
-    "type": "function",
-    "function": {
-      "name": "searchWeb",
-      "description": "Searches the web using DuckDuckGo and returns the top k results with titles and links. Use this to find information online.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "query": {
-            "type": "string",
-            "description": "The search query to look up on the web."
-          },
-          "k": {
-            "type": "integer",
-            "description": "Number of results to return (default is 3).",
-            "default": 3
-          }
-        },
-        "required": ["query"]
-      }
-    }
-  },
-  {
-    "type": "function",
-    "function": {
-      "name": "extractTextFromUrl",
-      "description": "Extracts the main text content from a webpage URL using a headless browser. Use this after searchWeb to read the actual content of a page.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "The URL of the webpage to extract text from."
-          }
-        },
-        "required": ["url"]
       }
     }
   },
